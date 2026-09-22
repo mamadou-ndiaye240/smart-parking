@@ -1,2 +1,2 @@
 # smart-parking
-application web pour faciiliter la recherche de stationnement
+application web pour faciliter la recherche de stationnement
