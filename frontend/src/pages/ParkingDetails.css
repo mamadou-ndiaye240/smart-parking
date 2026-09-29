@@ -1,0 +1,333 @@
+.details-page {
+  min-height: 100vh;
+  background: #070b13;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+
+.details-header {
+  height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.details-back-button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: #111722;
+  color: #a8b2c1;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.details-header span {
+  display: block;
+  margin-bottom: 3px;
+  color: #687488;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.details-header h1 {
+  margin: 0;
+  color: white;
+  font-size: 14px;
+}
+
+/* CONTENT */
+
+.details-content {
+  width: 714px;
+  margin: 26px auto;
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  gap: 22px;
+}
+
+/* LEFT */
+
+.details-left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.parking-summary,
+.details-information,
+.reliability,
+.availability-card,
+.verified-card {
+  background: #111722;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+/* SUMMARY */
+
+.parking-summary {
+  padding: 22px;
+}
+
+.summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.summary-top h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+}
+
+.summary-top p {
+  margin: 0;
+  color: #687488;
+  font-size: 10px;
+}
+
+.realtime-badge {
+  padding: 5px 9px;
+  border: 1px solid rgba(0, 230, 118, 0.35);
+  border-radius: 20px;
+  background: rgba(0, 230, 118, 0.08);
+  color: #00e676;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.summary-stats div {
+  padding: 11px;
+  background: #171e2a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9px;
+}
+
+.summary-stats span {
+  display: block;
+  margin-bottom: 7px;
+  color: #687488;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.summary-stats strong {
+  color: #00e676;
+  font-size: 11px;
+}
+
+/* INFORMATION */
+
+.details-information {
+  padding: 4px 18px;
+}
+
+.information-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.information-row:last-child {
+  border-bottom: none;
+}
+
+.information-row > span {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #1a212d;
+  color: #8190a5;
+  font-size: 13px;
+}
+
+.information-row small {
+  display: block;
+  margin-bottom: 4px;
+  color: #687488;
+  font-size: 7px;
+  letter-spacing: 0.8px;
+}
+
+.information-row strong {
+  color: #edf1f5;
+  font-size: 10px;
+}
+
+.information-row .available {
+  color: #00e676;
+}
+
+/* RELIABILITY */
+
+.reliability {
+  padding: 17px 20px;
+}
+
+.reliability-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reliability-top div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reliability-top strong {
+  font-size: 11px;
+}
+
+.reliability-top span {
+  color: #687488;
+  font-size: 8px;
+}
+
+.reliability-top > strong {
+  color: #00e676;
+  font-size: 21px;
+}
+
+.reliability-bar {
+  height: 5px;
+  margin-top: 12px;
+  background: #222b37;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.reliability-bar div {
+  width: 97%;
+  height: 100%;
+  background: #00e676;
+}
+
+/* RIGHT */
+
+.details-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* AVAILABILITY */
+
+.availability-card {
+  min-height: 220px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.availability-card > span {
+  color: #687488;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.availability-circle {
+  width: 105px;
+  height: 105px;
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #2a3341;
+  border-top-color: #ffb000;
+  border-right-color: #ffb000;
+  border-radius: 50%;
+}
+
+.availability-circle strong {
+  color: #ffb000;
+  font-size: 24px;
+}
+
+.availability-circle small {
+  color: #8190a5;
+  font-size: 7px;
+}
+
+.availability-card > strong {
+  color: #ffb000;
+  font-size: 11px;
+}
+
+/* VERIFIED */
+
+.verified-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border-color: rgba(255, 176, 0, 0.3);
+  background: rgba(255, 176, 0, 0.05);
+}
+
+.verified-card > span {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 176, 0, 0.12);
+  color: #ffb000;
+}
+
+.verified-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+}
+
+.verified-card p {
+  margin: 0;
+  color: #687488;
+  font-size: 8px;
+}
+
+/* ROUTE BUTTON */
+
+.route-button {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: #00e676;
+  color: #07110c;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(0, 230, 118, 0.15);
+}
+
+.route-button:hover {
+  background: #00ff85;
+}
