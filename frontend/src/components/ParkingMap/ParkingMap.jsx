@@ -1,27 +1,28 @@
+import MarkerClusterGroup from "react-leaflet-cluster";
+
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
-  Polyline,
   CircleMarker,
 } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-function createParkingIcon(status) {
-  let color = "#00e676";
-  let textColor = "#07110c";
+function createParkingIcon(status, availableSpaces) {
+  let color = "#687488";
+  let textColor = "#ffffff";
 
-  if (status === "Estimé") {
+  if (status === "realtime" && availableSpaces > 0) {
+    color = "#00e676";
+    textColor = "#07110c";
+  } else if (status === "realtime" && availableSpaces === 0) {
+    color = "#ff5252";
+  } else if (status === "estimated") {
     color = "#ffb000";
     textColor = "#171000";
-  }
-
-  if (status === "Non renseigné") {
-    color = "#687488";
-    textColor = "#ffffff";
   }
 
   return new L.DivIcon({
@@ -43,113 +44,121 @@ function createParkingIcon(status) {
   });
 }
 
-function ParkingMap({ showRoute = false, filter = "Tous" }) {
+function ParkingMap({ parkings = [], userLocation = null }) {
   const navigate = useNavigate();
 
-  const parkings = [
-    {
-      id: "castellane",
-      name: "Parking Castellane",
-      position: [43.2856, 5.3797],
-      available: 42,
-      capacity: 180,
-      status: "Temps réel",
-    },
-    {
-      id: "vieux-port",
-      name: "Parking Vieux-Port",
-      position: [43.2944, 5.3742],
-      available: 87,
-      capacity: 350,
-      status: "Estimé",
-    },
-    {
-      id: "opera",
-      name: "Parking Opéra",
-      position: [43.2929, 5.3771],
-      available: 134,
-      capacity: 250,
-      status: "Non renseigné",
-    },
-  ];
+  const validParkings = parkings.filter((parking) => {
+    const latitude = Number(parking.latitude);
+    const longitude = Number(parking.longitude);
 
-  const visibleParkings = parkings.filter((parking) => {
-    return filter === "Tous" || parking.status === filter;
+    return (
+      parking.id != null &&
+      Number.isFinite(latitude) &&
+      Number.isFinite(longitude) &&
+      latitude >= -90 &&
+      latitude <= 90 &&
+      longitude >= -180 &&
+      longitude <= 180
+    );
   });
 
-  const route = [
-    [43.289, 5.367],
-    [43.289, 5.372],
-    [43.287, 5.372],
-    [43.287, 5.376],
-    [43.2856, 5.3797],
-  ];
+  const initialCenter = userLocation
+    ? [userLocation.latitude, userLocation.longitude]
+    : validParkings.length > 0
+      ? [Number(validParkings[0].latitude), Number(validParkings[0].longitude)]
+      : [43.2965, 5.3698];
 
   return (
-    <MapContainer center={[43.289, 5.374]} zoom={14} className="parking-map">
-      <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <div style={{ width: "100%", height: "100%" }}>
+      <MapContainer
+        key={
+          userLocation
+            ? `${userLocation.latitude}-${userLocation.longitude}`
+            : "default-map"
+        }
+        center={initialCenter}
+        zoom={13}
+        className="parking-map"
+        style={{ width: "100%", height: "100%" }}
+      >
+        <TileLayer
+          attribution="&copy; OpenStreetMap contributors"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {visibleParkings.map((parking) => (
-        <Marker
-          key={parking.id}
-          position={parking.position}
-          icon={createParkingIcon(parking.status)}
-        >
-          <Popup>
-            <div>
-              <strong>{parking.name}</strong>
-              <br />
-              {parking.available} / {parking.capacity} places disponibles
-              <br />
-              <span>{parking.status}</span>
-              <br />
-              <button
-                onClick={() => navigate(`/parking/${parking.id}`)}
-                style={{
-                  marginTop: "8px",
-                  padding: "6px 10px",
-                  border: "none",
-                  borderRadius: "6px",
-                  background: "#00e676",
-                  color: "#07110c",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-              >
-                Voir les détails
-              </button>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
-
-      {showRoute && (
-        <>
-          <Polyline
-            positions={route}
-            pathOptions={{
-              color: "#00d9ff",
-              weight: 5,
-              opacity: 0.9,
-              dashArray: "10 8",
-            }}
-          />
-
+        {userLocation && (
           <CircleMarker
-            center={route[0]}
-            radius={9}
+            center={[userLocation.latitude, userLocation.longitude]}
+            radius={8}
             pathOptions={{
-              color: "#00d9ff",
-              fillColor: "#00d9ff",
+              color: "#ffffff",
+              fillColor: "#2196f3",
               fillOpacity: 1,
             }}
-          />
-        </>
-      )}
-    </MapContainer>
+          >
+            <Popup>Vous êtes ici</Popup>
+          </CircleMarker>
+        )}
+
+        {validParkings.map((parking) => {
+          const available =
+            parking.availableSpaces != null
+              ? Number(parking.availableSpaces)
+              : null;
+
+          const statusLabel =
+            parking.status === "realtime" && available !== null
+              ? "Temps réel"
+              : parking.status === "estimated" && available !== null
+                ? "Estimé"
+                : "Non renseigné";
+
+          return (
+            <Marker
+              key={parking.id}
+              position={[Number(parking.latitude), Number(parking.longitude)]}
+              icon={createParkingIcon(parking.status, available)}
+            >
+              <Popup>
+                <div>
+                  <strong>{parking.name}</strong>
+                  <br />
+                  {parking.address || "Adresse non renseignée"}
+                  <br />
+                  Capacité :{" "}
+                  {parking.capacity != null
+                    ? `${parking.capacity} places`
+                    : "inconnue"}
+                  <br />
+                  Disponibilité :{" "}
+                  {available !== null
+                    ? `${available} places libres`
+                    : "inconnue"}
+                  <br />
+                  Données : {statusLabel}
+                  <br />
+                  <button
+                    onClick={() => navigate(`/parking/${parking.id}`)}
+                    style={{
+                      marginTop: "8px",
+                      padding: "6px 10px",
+                      border: "none",
+                      borderRadius: "6px",
+                      background: "#00e676",
+                      color: "#07110c",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Voir les détails
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+    </div>
   );
 }
 
